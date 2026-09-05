@@ -1,8 +1,7 @@
 # socgholish-instructions
 
 Multilingual SocGholish and StealC instructions for WordPress admins and
-victims, in English, Dutch, French and Arabic, plus a client-side checker over
-DIVD's published apex lists.
+victims, in English, Dutch, French and Arabic.
 
 **Independent. Not affiliated with DIVD, the Dutch National Police, Europol or
 any vendor.** This repository links to official sources and does not speak for
