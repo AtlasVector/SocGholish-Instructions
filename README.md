@@ -34,11 +34,6 @@ Early. Content is being written. Nothing here is finished yet.
 1. English content for both audiences, live on socgholish.ma.
 2. Include French and Arabic translations.
 3. socgholish.nl with English and Dutch.
-4. A checker over the apex lists DIVD published for case DIVD-2026-00007.
-   Matching happens in the browser against static hash-sharded files, so
-   queries are processed locally. It reports whether a domain appears in the
-   published list and points to the right official channel. It does not hold
-   or serve the underlying data.
 
 ## Sources
 
