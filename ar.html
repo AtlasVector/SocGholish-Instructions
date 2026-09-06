@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SocGholish وStealC: ماذا حدث وما الذي يجب فعله الآن</title>
+<meta name="description" content="دليل مستقل باللغة العربية يشرح برمجية SocGholish الخبيثة، وكيفية تنظيف موقع ووردبريس المصاب بها، وما يجب فعله إذا سُرقت بيانات اعتمادك. لا تتبع، ولا طلبات لأطراف ثالثة.">
+<meta name="color-scheme" content="dark light">
+<link rel="canonical" href="https://socgholish.ma/ar/">
+<link rel="alternate" hreflang="ar" href="https://socgholish.ma/ar/">
+<link rel="alternate" hreflang="en" href="https://socgholish.ma/">
+<link rel="alternate" hreflang="x-default" href="https://socgholish.ma/">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --bg-raised: #12151b;
+    --bg-raised-2: #171b22;
+    --ink: #eceff3;
+    --muted: #97a1af;
+    --line: #262c35;
+    --accent: #e5484d;
+    --accent-strong: #ff6b6f;
+    --accent-ink: #2a0a0a;
+    --focus: #f5b83d;
+    --amber: #f5a623;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #fbfcfd;
+      --bg-raised: #ffffff;
+      --bg-raised-2: #f2f4f7;
+      --ink: #16191d;
+      --muted: #5b6470;
+      --line: #dde2e8;
+      --accent: #b3261e;
+      --accent-strong: #8f1d17;
+      --accent-ink: #fdecec;
+      --focus: #a15c00;
+      --amber: #a15c00;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 0 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 17px/1.8 system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+  }
+  main { max-width: 42rem; margin-inline: auto; }
+  .skip-link {
+    position: absolute; right: -999px; top: 0;
+    background: var(--accent); color: #fff;
+    padding: .6rem 1rem; border-radius: 0 0 0 8px;
+    font-size: .9rem; z-index: 10;
+  }
+  .skip-link:focus { right: 0; }
+  a { color: var(--accent-strong); }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px;
+  }
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  /* top bar */
+  .topbar {
+    display: flex; flex-wrap: wrap; gap: .5rem 1rem;
+    align-items: center; justify-content: space-between;
+    padding: 1.1rem 0; margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex; align-items: center; gap: .55rem;
+    font-size: .8rem; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink); font-weight: 700;
+  }
+  nav[aria-label="Language"] { font-size: .85rem; color: var(--muted); }
+  nav[aria-label="Language"] strong { color: var(--ink); }
+
+  /* hero */
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font: 600 .72rem/1 ui-monospace, monospace;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--accent-strong);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    padding: .35rem .65rem; border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+  h1 { font-size: clamp(1.7rem, 4vw, 2.15rem); line-height: 1.25; margin: 0 0 1.75rem; letter-spacing: normal; }
+  /* trust banner */
+  .trust {
+    display: flex; gap: .75rem; align-items: flex-start;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-right: 3px solid var(--amber);
+    border-radius: var(--radius);
+    padding: .9rem 1rem;
+    margin-bottom: 2.25rem;
+    font-size: .92rem; color: var(--muted);
+  }
+  .trust strong { color: var(--ink); }
+  .trust .glyph {
+    flex: none; width: 1.4rem; height: 1.4rem; margin-top: .1rem;
+    color: var(--amber);
+  }
+
+  h2 {
+    font-size: 1rem; text-transform: uppercase; letter-spacing: .03em;
+    color: var(--muted); margin: 2.75rem 0 1rem; font-weight: 700;
+  }
+  h2 .n { color: var(--line); margin-inline-end: .5rem; font-family: ui-monospace, monospace; }
+
+  p { margin: 0 0 1rem; }
+
+  /* audience picker */
+  .paths { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 34rem) { .paths { grid-template-columns: 1fr; } }
+  .path-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.15rem;
+  }
+  .path-card h3 { margin: 0 0 .4rem; font-size: 1rem; }
+  .path-card p { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .button {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .88rem; font-weight: 600; text-decoration: none;
+    color: var(--ink);
+    background: var(--bg-raised-2);
+    border: 1px solid var(--line);
+    padding: .5rem .75rem; border-radius: 7px;
+  }
+  .button:hover { border-color: var(--accent); }
+  .button .arrow { color: var(--accent-strong); }
+
+  /* resource list */
+  .resources { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+  .resources li {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: .9rem 1rem;
+  }
+  .resources a {
+    font-weight: 600; text-decoration: none;
+    display: block; margin-bottom: .25rem;
+  }
+  .resources a:hover { text-decoration: underline; }
+  .resources li > span { display: block; color: var(--muted); font-size: .92rem; }
+
+  /* episode badges used inline in prose */
+  .ep {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .78rem; font-weight: 700;
+    color: var(--accent-strong);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 5px; padding: .1rem .4rem;
+    white-space: nowrap;
+  }
+
+  /* independence card: a standalone, prominent block - not part of the
+     00/01/02 numbered-section pattern, and not styled as an alert. */
+  .independence {
+    background: var(--bg-raised-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    margin: 3rem 0 1rem;
+  }
+  .independence h2 {
+    margin: 0 0 .65rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--ink);
+  }
+  .independence p {
+    margin: 0;
+    color: var(--ink);
+    font-size: .95rem;
+  }
+
+  footer {
+    max-width: 42rem; margin-inline: auto;
+    margin-top: 3.5rem; padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted); font-size: .88rem;
+    text-align: center;
+  }
+  footer p { margin: 0 0 .9rem; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+<main id="main">
+
+  <div class="topbar">
+    <div class="brand">تعليمات <span dir="ltr">SocGholish</span></div>
+    <nav aria-label="Language">
+      <strong>العربية</strong> ·
+      <a href="index.html" dir="ltr">English</a> ·
+      <span>الفرنسية والهولندية قريبًا</span>
+    </nav>
+  </div>
+
+  <span class="eyebrow"><span dir="ltr">Operation Endgame</span> · الموسم الثالث</span>
+  <h1><span dir="ltr">SocGholish</span> و<span dir="ltr">StealC</span></h1>
+
+  <div class="trust">
+    <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M12 9v4M12 17h.01"/>
+      <path d="M10.29 3.86L1.82 18a1 1 0 00.87 1.5h18.62a1 1 0 00.87-1.5L13.71 3.86a1 1 0 00-1.72 0z"/>
+    </svg>
+    <div>
+      <strong>هل تدير موقعًا على <span dir="ltr">WordPress</span>؟</strong>
+      إذا كان موقعك ضمن القائمة الرسمية المنشورة، فهذا يعني أنه كان يعرض على زواره تحديث متصفح وهميًا دون علمك.
+      تحقق من ذلك فورًا، ثم أزل الشيفرة الدخيلة وغيّر كلمات مرور جميع حسابات الإدارة - التفاصيل الكاملة في الدليل أدناه.
+    </div>
+  </div>
+
+  <p>
+    <span dir="ltr">SocGholish</span> برنامج خبيث يعمل كأداة تحميل لبرمجيات ضارة أخرى.
+    ينتشر عبر اختراق مواقع إلكترونية شرعية، وغالبًا ما تكون هذه المواقع مبنية على منصة <span dir="ltr">WordPress</span>، حيث يظهر لزوارها إشعارًا مزيفًا يطلب تحديث المتصفح.
+    أما من ينقر على هذا "التحديث" ويشغّله، فيُصاب جهازه ببرنامج تجسسي يسرق كلمات المرور المحفوظة وبيانات اعتماد أخرى.
+  </p>
+  <p>
+    يمسّ هذا الحادث فئتين مختلفتين من الأشخاص، ولكل منهما ما يلزمه من إجراءات: أصحاب المواقع الإلكترونية المخترقة من جهة، ومن شغّلوا التحديث المزيف من جهة أخرى.
+  </p>
+
+  <h2><span class="n">00</span>اختر المسار المناسب لحالتك</h2>
+  <div class="paths">
+    <div class="path-card">
+      <h3>أدير موقعًا على <span dir="ltr">WordPress</span></h3>
+      <p>تحقق مما إذا كان موقعك ضمن القائمة الرسمية المنشورة، واطّلع على خطوات تنظيفه من الإصابة.</p>
+      <a class="button" href="https://csirt.divd.nl/cases/DIVD-2026-00007/">دليل <span dir="ltr">DIVD</span> للتنظيف <span class="arrow">&larr;</span></a>
+    </div>
+    <div class="path-card">
+      <h3>ربما شغّلت التحديث المزيف</h3>
+      <p>تحقق مما إذا كانت بياناتك ضمن البيانات المسروقة، وتعرّف على الخطوات اللازمة لتأمين حساباتك.</p>
+      <a class="button" href="https://haveibeenpwned.com/">تحقّق عبر <span dir="ltr">Have I Been Pwned</span> <span class="arrow">&larr;</span></a>
+    </div>
+  </div>
+
+  <h2><span class="n">01</span>إلى أين تتوجه الآن</h2>
+  <ul class="resources">
+    <li>
+      <a href="https://www.operation-endgame.com/">الصفحة الرسمية لعملية <span dir="ltr">Operation Endgame</span></a>
+      <span>العملية الدولية لإنفاذ القانون المسؤولة عن هذه الملاحقات وعن إخطار المتضررين.</span>
+    </li>
+    <li>
+      <a href="https://csirt.divd.nl/cases/DIVD-2026-00007/">تعليمات <span dir="ltr">DIVD</span> الرسمية - القضية <span dir="ltr">DIVD-2026-00007</span></a>
+      <span>إرشادات رسمية موجهة لمسؤولي مواقع <span dir="ltr">WordPress</span> وللمتضررين، صادرة عن معهد <span dir="ltr">DIVD</span> الهولندي المتخصص في الإفصاح عن الثغرات الأمنية، ومتاحة باللغة الإنجليزية.</span>
+    </li>
+    <li>
+      <a href="https://haveibeenpwned.com/"><span dir="ltr">Have I Been Pwned</span></a>
+      <span>إن كنت تريد معرفة ما إذا كان بريدك الإلكتروني ضمن بيانات <span dir="ltr">StealC</span> المسروقة، يمكنك التحقق من هنا.
+      هذا الموقع نفسه لا يستطيع إخبارك بذلك.</span>
+    </li>
+    <li>
+      <a href="https://www.politie.nl/en/news/2026/juni/18/11-international-law-enforcement-initiate-hunt-on-malware-group-socgholish.html">بيان الشرطة الوطنية الهولندية - 18 يونيو 2026</a>
+      <span>الإعلان الرسمي بشأن حملة <span dir="ltr">SocGholish</span>.</span>
+    </li>
+  </ul>
+
+  <!--
+    Country list and the 26M figure are quoted from the DIVD case page itself
+    (csirt.divd.nl/cases/DIVD-2026-00007/), not derived here. Secondary
+    reporting on the StealC/Amadey action cites a smaller number of email
+    addresses actually loaded into Have I Been Pwned's search index at
+    announcement time (~4.3M) - that's the searchable subset, not a
+    contradiction of the total dataset size DIVD describes. Don't "correct"
+    the 26M figure to match HIBP's count without re-checking both sources.
+    (Carried over unchanged from the English index.html - not reader-facing.)
+  -->
+  <h2><span class="n">02</span>خلفية الحادث</h2>
+  <p>
+    <span dir="ltr">Operation Endgame</span> عملية دولية منسّقة لإنفاذ القانون تستهدف البنية التحتية الرقمية للجريمة المنظمة، شاركت فيها هولندا وفرنسا والولايات المتحدة والمملكة المتحدة وألمانيا وكندا وبلجيكا وأستراليا، إلى جانب وكالة الشرطة الأوروبية (يوروبول) ووحدة التعاون القضائي الأوروبي (يوروجست).
+  </p>
+  <p>
+    يغطي هذا الموقع حلقتين من الموسم الثالث لهذه العملية، وهما الحلقتان اللتان أسفرتا عن بيانات ضحايا حقيقية: <span class="ep" dir="ltr">S03E03</span> الخاصة ببرمجية <span dir="ltr">SocGholish</span>، والتي أعلنتها الشرطة الوطنية الهولندية بتاريخ 18 يونيو 2026، و<span class="ep" dir="ltr">S03E04</span> الخاصة ببرمجيتي <span dir="ltr">StealC</span> و<span dir="ltr">Amadey</span>، والمُعلَن عنها بتاريخ 24 يونيو 2026، والتي شملت أكثر من 26 مليون عنوان بريد إلكتروني - عدد كبير يتعذّر معه إخطار كل شخص على حدة، ولهذا يُوجَّه الأفراد للتحقق عبر <span dir="ltr">Have I Been Pwned</span> بدلاً من ذلك.
+  </p>
+
+  <div class="independence">
+    <h2>استقلالية هذا الموقع</h2>
+    <p>
+      هذا الموقع مستقل تمامًا عن الجهات المذكورة فيه.
+      فهو غير تابع لمعهد <span dir="ltr">DIVD</span>، ولا للشرطة الوطنية الهولندية، ولا ليوروبول، ولا لأي جهة تجارية، ولا يتحدث نيابة عن أي منها أو باسمها.
+      وهو يكتفي بالإحالة إلى مصادرها الرسمية المنشورة.
+    </p>
+  </div>
+
+</main>
+<footer>
+  <p>موقع ثابت بالكامل: بلا تتبع، وبلا أي طلبات تُرسَل لأطراف ثالثة.</p>
+  <a class="button" href="https://github.com/AtlasVector/SocGholish-Instructions">المصدر على <span dir="ltr">GitHub</span></a>
+</footer>
+</body>
+</html>
