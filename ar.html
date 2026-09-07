@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SocGholish وStealC: ماذا حدث وما الذي يجب فعله الآن</title>
-<meta name="description" content="دليل مستقل باللغة العربية يشرح برمجية SocGholish الخبيثة، وكيفية تنظيف موقع ووردبريس المصاب بها، وما يجب فعله إذا سُرقت بيانات اعتمادك. لا تتبع، ولا طلبات لأطراف ثالثة.">
+<title>SocGholish و StealC: ماذا حدث وماذا يجب فعله</title>
+<meta name="description" content="ما هو SocGholish، وكيفية إزالته من موقع WordPress الخاص بك، وماذا تفعل إذا سُرقت بيانات اعتمادك. مستقل، بدون تتبع.">
 <meta name="color-scheme" content="dark light">
-<link rel="canonical" href="https://socgholish.ma/ar/">
-<link rel="alternate" hreflang="ar" href="https://socgholish.ma/ar/">
+<link rel="canonical" href="https://socgholish.ma/">
 <link rel="alternate" hreflang="en" href="https://socgholish.ma/">
 <link rel="alternate" hreflang="x-default" href="https://socgholish.ma/">
 <style>
@@ -22,8 +21,11 @@
     --accent-strong: #ff6b6f;
     --accent-ink: #2a0a0a;
     --focus: #f5b83d;
+    --ok: #4ade80;
     --amber: #f5a623;
     --radius: 10px;
+    --pill-bg: #f5b83d;
+    --pill-ink: #1a1200;
   }
   @media (prefers-color-scheme: light) {
     :root {
@@ -38,6 +40,8 @@
       --accent-ink: #fdecec;
       --focus: #a15c00;
       --amber: #a15c00;
+      --pill-bg: #f6d9a0;
+      --pill-ink: #4a2e00;
     }
   }
   * { box-sizing: border-box; }
@@ -47,16 +51,16 @@
     padding: 0 1.25rem 4rem;
     background: var(--bg);
     color: var(--ink);
-    font: 400 17px/1.8 system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+    font: 400 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   main { max-width: 42rem; margin-inline: auto; }
   .skip-link {
-    position: absolute; right: -999px; top: 0;
+    position: absolute; left: -999px; top: 0;
     background: var(--accent); color: #fff;
-    padding: .6rem 1rem; border-radius: 0 0 0 8px;
+    padding: .6rem 1rem; border-radius: 0 0 8px 0;
     font-size: .9rem; z-index: 10;
   }
-  .skip-link:focus { right: 0; }
+  .skip-link:focus { left: 0; }
   a { color: var(--accent-strong); }
   a:focus-visible, button:focus-visible {
     outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px;
@@ -91,13 +95,13 @@
     padding: .35rem .65rem; border-radius: 999px;
     margin-bottom: 1rem;
   }
-  h1 { font-size: clamp(1.7rem, 4vw, 2.15rem); line-height: 1.25; margin: 0 0 1.75rem; letter-spacing: normal; }
+  h1 { font-size: clamp(1.7rem, 4vw, 2.15rem); line-height: 1.2; margin: 0 0 1.75rem; letter-spacing: -.01em; }
   /* trust banner */
   .trust {
     display: flex; gap: .75rem; align-items: flex-start;
     background: var(--bg-raised);
     border: 1px solid var(--line);
-    border-right: 3px solid var(--amber);
+    border-left: 3px solid var(--amber);
     border-radius: var(--radius);
     padding: .9rem 1rem;
     margin-bottom: 2.25rem;
@@ -110,7 +114,7 @@
   }
 
   h2 {
-    font-size: 1rem; text-transform: uppercase; letter-spacing: .03em;
+    font-size: 1rem; text-transform: uppercase; letter-spacing: .05em;
     color: var(--muted); margin: 2.75rem 0 1rem; font-weight: 700;
   }
   h2 .n { color: var(--line); margin-inline-end: .5rem; font-family: ui-monospace, monospace; }
@@ -152,7 +156,7 @@
     display: block; margin-bottom: .25rem;
   }
   .resources a:hover { text-decoration: underline; }
-  .resources li > span { display: block; color: var(--muted); font-size: .92rem; }
+  .resources span { display: block; color: var(--muted); font-size: .92rem; }
 
   /* episode badges used inline in prose */
   .ep {
@@ -165,8 +169,6 @@
     white-space: nowrap;
   }
 
-  /* independence card: a standalone, prominent block - not part of the
-     00/01/02 numbered-section pattern, and not styled as an alert. */
   .independence {
     background: var(--bg-raised-2);
     border: 1px solid var(--line);
@@ -189,7 +191,6 @@
   }
 
   footer {
-    max-width: 42rem; margin-inline: auto;
     margin-top: 3.5rem; padding-top: 1.75rem;
     border-top: 1px solid var(--line);
     color: var(--muted); font-size: .88rem;
@@ -199,20 +200,19 @@
 </style>
 </head>
 <body>
-<a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+<a class="skip-link" href="#main">الانتقال إلى المحتوى</a>
 <main id="main">
 
   <div class="topbar">
-    <div class="brand">تعليمات <span dir="ltr">SocGholish</span></div>
+    <div class="brand">SocGholish التعليمات</div>
     <nav aria-label="Language">
       <strong>العربية</strong> ·
-      <a href="index.html" dir="ltr">English</a> ·
-      <span>الفرنسية والهولندية قريبًا</span>
+      <span>الإنجليزية، الهولندية، الفرنسية قريبًا</span>
     </nav>
   </div>
 
-  <span class="eyebrow"><span dir="ltr">Operation Endgame</span> · الموسم الثالث</span>
-  <h1><span dir="ltr">SocGholish</span> و<span dir="ltr">StealC</span></h1>
+  <span class="eyebrow">Operation Endgame · الموسم 3</span>
+  <h1>SocGholish و StealC</h1>
 
   <div class="trust">
     <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -220,87 +220,79 @@
       <path d="M10.29 3.86L1.82 18a1 1 0 00.87 1.5h18.62a1 1 0 00.87-1.5L13.71 3.86a1 1 0 00-1.72 0z"/>
     </svg>
     <div>
-      <strong>هل تدير موقعًا على <span dir="ltr">WordPress</span>؟</strong>
-      إذا كان موقعك ضمن القائمة الرسمية المنشورة، فهذا يعني أنه كان يعرض على زواره تحديث متصفح وهميًا دون علمك.
-      تحقق من ذلك فورًا، ثم أزل الشيفرة الدخيلة وغيّر كلمات مرور جميع حسابات الإدارة - التفاصيل الكاملة في الدليل أدناه.
+      <strong>هل تدير موقعًا على WordPress؟</strong>
+    </br>
+      إذا كان موقعك مدرجًا في قائمة Apex المنشورة - راجع الدليل أدناه.
     </div>
   </div>
 
   <p>
-    <span dir="ltr">SocGholish</span> برنامج خبيث يعمل كأداة تحميل لبرمجيات ضارة أخرى.
-    ينتشر عبر اختراق مواقع إلكترونية شرعية، وغالبًا ما تكون هذه المواقع مبنية على منصة <span dir="ltr">WordPress</span>، حيث يظهر لزوارها إشعارًا مزيفًا يطلب تحديث المتصفح.
-    أما من ينقر على هذا "التحديث" ويشغّله، فيُصاب جهازه ببرنامج تجسسي يسرق كلمات المرور المحفوظة وبيانات اعتماد أخرى.
+
+    Socgholish هو نوع من البرمجيات الخبيثة تم اكتشافه لأول مرة في بيئة حقيقية عام 2018. تعمل هذه البرمجية الخبيثة كأداة تنزيل، ويتم توزيعها عبر شفرة JavaScript خبيثة يتم إدخالها في مواقع الويب المخترقة. وبمجرد تثبيتها على جهاز الكمبيوتر، يمكن لهذه البرمجية الخبيثة تنزيل أنواع أخرى متنوعة من البرمجيات الخبيثة، بما في ذلك برامج الفدية.
+
+    يرتبط هذا النوع المتطور من البرمجيات الخبيثة بمجموعة الجريمة الإلكترونية الروسية المعروفة باسم «Evil Corp». ونظرًا لوظيفة «البرنامج الناقل» التي يتمتع بها، يُعتقد أن المجموعة تحقق أرباحًا من هذه البرمجيات الخبيثة عن طريق بيع حق الوصول إلى الأنظمة التي تصيبها. ولهذا السبب، قد تؤدي الإصابة ببرمجية «Socgholish» إلى إصابات متعددة ببرمجيات خبيثة أخرى إذا ما وفرت المجموعة حق الوصول إلى عدة عملاء.
+
   </p>
   <p>
-    يمسّ هذا الحادث فئتين مختلفتين من الأشخاص، ولكل منهما ما يلزمه من إجراءات: أصحاب المواقع الإلكترونية المخترقة من جهة، ومن شغّلوا التحديث المزيف من جهة أخرى.
+    هناك مجموعتان مختلفتان متضررتان، ولكل منهما احتياجات مختلفة: أصحاب المواقع الإلكترونية المخترقة، والأشخاص الذين قاموا بتوزيع التحديث المزيف.
   </p>
 
-  <h2><span class="n">00</span>اختر المسار المناسب لحالتك</h2>
+  <h2><span class="n">00</span>اختر مسارك</h2>
   <div class="paths">
     <div class="path-card">
-      <h3>أدير موقعًا على <span dir="ltr">WordPress</span></h3>
-      <p>تحقق مما إذا كان موقعك ضمن القائمة الرسمية المنشورة، واطّلع على خطوات تنظيفه من الإصابة.</p>
-      <a class="button" href="https://csirt.divd.nl/cases/DIVD-2026-00007/">دليل <span dir="ltr">DIVD</span> للتنظيف <span class="arrow">&larr;</span></a>
+      <h3>أنا أدير موقعًا على WordPress</h3>
+      <p>تحقق مما إذا كان موقعك مدرجًا في القائمة المنشورة وكيفية إزالة العدوى.</p>
+      <a class="button" href="https://csirt.divd.nl/cases/DIVD-2026-00007/">دليل التنظيف من DIVD <span class="arrow">&larr;</span></a>
     </div>
     <div class="path-card">
-      <h3>ربما شغّلت التحديث المزيف</h3>
-      <p>تحقق مما إذا كانت بياناتك ضمن البيانات المسروقة، وتعرّف على الخطوات اللازمة لتأمين حساباتك.</p>
-      <a class="button" href="https://haveibeenpwned.com/">تحقّق عبر <span dir="ltr">Have I Been Pwned</span> <span class="arrow">&larr;</span></a>
+      <h3>ربما قمت بتشغيل التحديث</h3>
+      <p>تأكد مما إذا كانت بياناتك موجودة ضمن البيانات المسروقة وما الذي يجب تغييره.</p>
+      <a class="button" href="https://haveibeenpwned.com/">تحقق من موقع Have I Been Pwned <span class="arrow">&larr;</span></a>
     </div>
   </div>
 
   <h2><span class="n">01</span>إلى أين تتوجه الآن</h2>
   <ul class="resources">
     <li>
-      <a href="https://www.operation-endgame.com/">الصفحة الرسمية لعملية <span dir="ltr">Operation Endgame</span></a>
-      <span>العملية الدولية لإنفاذ القانون المسؤولة عن هذه الملاحقات وعن إخطار المتضررين.</span>
+      <a href="https://www.operation-endgame.com/">عملية Endgame</a>
+      <span>العملية الدولية لإنفاذ القانون التي تقف وراء إزالة المواقع وإخطار الضحايا.</span>
     </li>
     <li>
-      <a href="https://csirt.divd.nl/cases/DIVD-2026-00007/">تعليمات <span dir="ltr">DIVD</span> الرسمية - القضية <span dir="ltr">DIVD-2026-00007</span></a>
-      <span>إرشادات رسمية موجهة لمسؤولي مواقع <span dir="ltr">WordPress</span> وللمتضررين، صادرة عن معهد <span dir="ltr">DIVD</span> الهولندي المتخصص في الإفصاح عن الثغرات الأمنية، ومتاحة باللغة الإنجليزية.</span>
+      <a href="https://csirt.divd.nl/cases/DIVD-2026-00007/">قضية DIVD CSIRT رقم DIVD-2026-00007</a>
+      <span>التعليمات الرسمية لمسؤولي WordPress وللضحايا، باللغة الإنجليزية.</span>
     </li>
     <li>
-      <a href="https://haveibeenpwned.com/"><span dir="ltr">Have I Been Pwned</span></a>
-      <span>إن كنت تريد معرفة ما إذا كان بريدك الإلكتروني ضمن بيانات <span dir="ltr">StealC</span> المسروقة، يمكنك التحقق من هنا.
-      هذا الموقع نفسه لا يستطيع إخبارك بذلك.</span>
+      <a href="https://haveibeenpwned.com/">Have I Been Pwned</a>
+      <span>إذا كنت تريد معرفة ما إذا كان عنوان بريدك الإلكتروني موجودًا في بيانات StealC، فتحقق من هنا.
+      لا يمكن لهذا الموقع إخبارك بذلك.</span>
     </li>
     <li>
-      <a href="https://www.politie.nl/en/news/2026/juni/18/11-international-law-enforcement-initiate-hunt-on-malware-group-socgholish.html">بيان الشرطة الوطنية الهولندية - 18 يونيو 2026</a>
-      <span>الإعلان الرسمي بشأن حملة <span dir="ltr">SocGholish</span>.</span>
+      <a href="https://www.politie.nl/en/news/2026/juni/18/11-international-law-enforcement-initiate-hunt-on-malware-group-socgholish.html">بيان صحفي صادر عن الشرطة الوطنية الهولندية، 18 يونيو 2026</a>
+      <span>إعلان SocGholish.</span>
     </li>
   </ul>
 
-  <!--
-    Country list and the 26M figure are quoted from the DIVD case page itself
-    (csirt.divd.nl/cases/DIVD-2026-00007/), not derived here. Secondary
-    reporting on the StealC/Amadey action cites a smaller number of email
-    addresses actually loaded into Have I Been Pwned's search index at
-    announcement time (~4.3M) - that's the searchable subset, not a
-    contradiction of the total dataset size DIVD describes. Don't "correct"
-    the 26M figure to match HIBP's count without re-checking both sources.
-    (Carried over unchanged from the English index.html - not reader-facing.)
-  -->
-  <h2><span class="n">02</span>خلفية الحادث</h2>
+  <h2><span class="n">02</span>الخلفية</h2>
   <p>
-    <span dir="ltr">Operation Endgame</span> عملية دولية منسّقة لإنفاذ القانون تستهدف البنية التحتية الرقمية للجريمة المنظمة، شاركت فيها هولندا وفرنسا والولايات المتحدة والمملكة المتحدة وألمانيا وكندا وبلجيكا وأستراليا، إلى جانب وكالة الشرطة الأوروبية (يوروبول) ووحدة التعاون القضائي الأوروبي (يوروجست).
+    عملية «إندغيم» هي عملية دولية منسقة لإنفاذ القانون تستهدف البنية التحتية للبرامج الضارة الإجرامية، وتُنفذ بالتعاون مع هولندا وفرنسا والولايات المتحدة والمملكة المتحدة وألمانيا وكندا وبلجيكا وأستراليا، إلى جانب اليوروبول ويوروجست.
   </p>
   <p>
-    يغطي هذا الموقع حلقتين من الموسم الثالث لهذه العملية، وهما الحلقتان اللتان أسفرتا عن بيانات ضحايا حقيقية: <span class="ep" dir="ltr">S03E03</span> الخاصة ببرمجية <span dir="ltr">SocGholish</span>، والتي أعلنتها الشرطة الوطنية الهولندية بتاريخ 18 يونيو 2026، و<span class="ep" dir="ltr">S03E04</span> الخاصة ببرمجيتي <span dir="ltr">StealC</span> و<span dir="ltr">Amadey</span>، والمُعلَن عنها بتاريخ 24 يونيو 2026، والتي شملت أكثر من 26 مليون عنوان بريد إلكتروني - عدد كبير يتعذّر معه إخطار كل شخص على حدة، ولهذا يُوجَّه الأفراد للتحقق عبر <span dir="ltr">Have I Been Pwned</span> بدلاً من ذلك.
+    يغطي هذا الموقع حلقتين من الموسم الثالث اللتين أسفرتا عن بيانات الضحايا: <span class="ep">S03E03</span> SocGholish، التي أعلنت عنها الشرطة الوطنية الهولندية في 18 يونيو 2026، و<span class="ep">S03E04</span> StealC وAmadey، التي أُعلن عنها في 24 يونيو 2026، والتي تشمل أكثر من 26 مليون عنوان بريد إلكتروني، وهو عدد كبير جدًا بحيث يتعذر إخطار كل فرد على حدة، ولهذا السبب يتم توجيه الأفراد بدلاً من ذلك إلى موقع Have I Been Pwned.
   </p>
 
   <div class="independence">
-    <h2>استقلالية هذا الموقع</h2>
+    <h2>إشعار</h2>
     <p>
-      هذا الموقع مستقل تمامًا عن الجهات المذكورة فيه.
-      فهو غير تابع لمعهد <span dir="ltr">DIVD</span>، ولا للشرطة الوطنية الهولندية، ولا ليوروبول، ولا لأي جهة تجارية، ولا يتحدث نيابة عن أي منها أو باسمها.
-      وهو يكتفي بالإحالة إلى مصادرها الرسمية المنشورة.
+      هذا الموقع مستقل.
+      وهو غير تابع لـ DIVD أو الشرطة الوطنية الهولندية أو اليوروبول أو أي مزود خدمات، ولا يتحدث باسمهم أو نيابة عنهم.
+      ويحتوي على روابط إلى المواد التي نشروها.
     </p>
   </div>
 
+  <footer>
+    <a class="button" href="https://github.com/AtlasVector/SocGholish-Instructions">المصدر على GitHub</a>
+  </footer>
+
 </main>
-<footer>
-  <p>موقع ثابت بالكامل: بلا تتبع، وبلا أي طلبات تُرسَل لأطراف ثالثة.</p>
-  <a class="button" href="https://github.com/AtlasVector/SocGholish-Instructions">المصدر على <span dir="ltr">GitHub</span></a>
-</footer>
 </body>
 </html>

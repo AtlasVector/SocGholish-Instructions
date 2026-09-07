@@ -24,8 +24,6 @@
     --ok: #4ade80;
     --amber: #f5a623;
     --radius: 10px;
-    /* Decoupled from --focus so the light-theme focus-ring color change
-       (below) can't accidentally break the pill's text/background contrast. */
     --pill-bg: #f5b83d;
     --pill-ink: #1a1200;
   }
@@ -42,8 +40,6 @@
       --accent-ink: #fdecec;
       --focus: #a15c00;
       --amber: #a15c00;
-      /* var(--focus) is too dark to pair with --pill-ink at this size/weight
-         (~3.5:1); use a paler amber so the pill still clears 4.5:1. */
       --pill-bg: #f6d9a0;
       --pill-ink: #4a2e00;
     }
@@ -173,8 +169,6 @@
     white-space: nowrap;
   }
 
-  /* independence card: a standalone, prominent block - not part of the
-     00/01/02 numbered-section pattern, and not styled as an alert. */
   .independence {
     background: var(--bg-raised-2);
     border: 1px solid var(--line);
@@ -228,17 +222,23 @@
     <div>
       <strong>Run a WordPress site?</strong>
     </br>
-      If your site was on the published apex list, check - see the guide below.
+      If your site was on the published apex list - see the guide below.
     </div>
   </div>
 
   <p>
-    SocGholish is a malware downloader.
-    It gets onto legitimate websites, very often WordPress sites, and shows visitors a fake browser update.
-    People who run that "update" get an information stealer, which takes saved passwords and other credentials from their computer.
+
+    Socgholish Malware
+    
+    Socgholish is a malware variant first discovered in the wild in 2018. The malware acts as a downloader and is delivered via malicious JavaScript injected into compromised websites. Once installed on a computer, the malware can download various other types of malware, including ransomware.
+
+    This sophisticated malware variant is associated with the Russian cybercrime group known as Evil Corp. Due to its downloader functionality, it is believed that the group monetizes the malware by selling access to the systems that it infects. For this reason, a Socgholish infection could lead to multiple other malware infections if the group provides access to multiple customers.
+    
   </p>
   <p>
-    Two different groups are affected, and they need different things: the owners of the compromised websites, and the people who ran the fake update.
+    Two different groups are affected, and they need different things: 
+      - The owners of the compromised websites. 
+      - And the people who ran the fake update.
   </p>
 
   <h2><span class="n">00</span>Choose your path</h2>
@@ -276,15 +276,6 @@
     </li>
   </ul>
 
-  <!--
-    Country list and the 26M figure are quoted from the DIVD case page itself
-    (csirt.divd.nl/cases/DIVD-2026-00007/), not derived here. Secondary
-    reporting on the StealC/Amadey action cites a smaller number of email
-    addresses actually loaded into Have I Been Pwned's search index at
-    announcement time (~4.3M) - that's the searchable subset, not a
-    contradiction of the total dataset size DIVD describes. Don't "correct"
-    the 26M figure to match HIBP's count without re-checking both sources.
-  -->
   <h2><span class="n">02</span>Background</h2>
   <p>
     Operation Endgame is a coordinated international law enforcement operation against criminal malware infrastructure, run with the Netherlands, France, the United States, the United Kingdom, Germany, Canada, Belgium and Australia, alongside Europol and Eurojust.
